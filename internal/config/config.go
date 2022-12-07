@@ -19,6 +19,7 @@ var C *Config
 type Config struct {
 	HTTPServer HTTPServer `yaml:"http_server"`
 	NatsServer NatsServer `yaml:"nats_server"`
+	Mysql      Mysql      `yaml:"mysql"`
 	Logger     Logger     `yaml:"logger"`
 }
 
@@ -35,6 +36,15 @@ type NatsServer struct {
 	StreamName         string `yaml:"streamName"`
 	StreamSubjects     string `yaml:"streamSubjects"`
 	SubjectNameMessage string `yaml:"subjectNameMessage"`
+}
+
+type Mysql struct {
+	Host     string `yaml:"host"`
+	Port     string `yaml:"port"`
+	Username string `yaml:"username"`
+	Password string `yaml:"password"`
+	Dbname   string `yaml:"dbname"`
+	Charset  string `yaml:"charset"`
 }
 
 type Logger struct {
