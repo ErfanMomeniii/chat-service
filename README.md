@@ -1,2 +1,2 @@
 # chat-service
-chat service with go and jetstream
+chat service with gin and jetstream
