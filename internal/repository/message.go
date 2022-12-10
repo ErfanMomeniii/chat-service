@@ -23,7 +23,7 @@ type MessageRepository struct {
 	DB *gorm.DB
 }
 
-func NewMessageRepo(db db.Driver) *MessageRepository {
+func NewMessageRepository(db db.Driver) *MessageRepository {
 	dbConn, _ := db.Connect(config.C.Mysql.Dbname)
 
 	return &MessageRepository{
@@ -31,7 +31,7 @@ func NewMessageRepo(db db.Driver) *MessageRepository {
 	}
 }
 
-func (repo *MessageRepository) Create(messages ...model.Message) error {
+func (repo *MessageRepository) Save(messages ...model.Message) error {
 	var messageSlice []model.Message
 	for _, message := range messages {
 		messageSlice = append(messageSlice, message)
