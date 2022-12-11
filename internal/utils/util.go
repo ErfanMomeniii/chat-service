@@ -8,7 +8,7 @@ import (
 )
 
 func BindToModel(message request.Message) *model.Message {
-	userRepo := repository.NewUserRepository(&db.Mysql{})
+	userRepo := repository.NewUserRepository(&db.Default{})
 
 	to, _ := userRepo.Get(message.Receiver)
 	from, _ := userRepo.Get(message.Sender)

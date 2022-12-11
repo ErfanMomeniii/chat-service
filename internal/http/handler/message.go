@@ -11,7 +11,7 @@ import (
 )
 
 var (
-	MessageRepo = repository.NewMessageRepository(&db.Mysql{})
+	MessageRepo = repository.NewMessageRepository(&db.Default{})
 )
 
 type MessageHandler interface {
