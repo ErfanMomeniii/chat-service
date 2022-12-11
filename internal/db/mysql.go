@@ -21,7 +21,7 @@ type Connection interface {
 }
 
 type Register interface {
-	Create(dbname string) (*gorm.DB, error)
+	Create(dbname string) error
 }
 
 type Migration interface {

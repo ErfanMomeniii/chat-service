@@ -4,9 +4,9 @@ import "gorm.io/gorm"
 
 type Message struct {
 	gorm.Model
-	FromRefer int
+	FromRefer uint
 	From      User `gorm:"foreignKey:FromRefer"`
-	ToRefer   int
+	ToRefer   uint
 	To        User `gorm:"foreignKey:FromRefer"`
 	Body      string
 	IsSeen    bool
