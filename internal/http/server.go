@@ -34,17 +34,20 @@ func (s *server) RegisterRoutes() {
 	{
 		m := v1.Group("/message")
 		{
-			m.POST("", internalHandler.SendMessage)
-			m.GET("/:messageId", internalHandler.GetMessage)
-			m.DELETE("/:messageId", internalHandler.DeleteMessage)
-			m.PUT("/:messageId", internalHandler.UpdateMessage)
+			messageHandler := internalHandler.NewMessageHandler()
+			m.POST("", messageHandler.SendMessage)
+			m.GET("/:messageId", messageHandler.GetMessage)
+			m.DELETE("/:messageId", messageHandler.DeleteMessage)
+			m.PUT("/:messageId", messageHandler.UpdateMessage)
 		}
+
 		u := v1.Group("/user")
 		{
-			u.POST("", internalHandler.SaveUser)
-			u.GET("/:userId", internalHandler.GetUser)
-			u.DELETE("/:userId", internalHandler.DeleteUser)
-			u.PUT("/:userId", internalHandler.UpdateUser)
+			userHandler := internalHandler.NewUserHandler()
+			u.POST("", userHandler.SaveUser)
+			u.GET("/:userId", userHandler.GetUser)
+			u.DELETE("/:userId", userHandler.DeleteUser)
+			u.PUT("/:userId", userHandler.UpdateUser)
 		}
 	}
 

@@ -10,10 +10,6 @@ import (
 	"net/http"
 )
 
-var (
-	MessageRepo = repository.NewMessageRepository(&db.Default{})
-)
-
 type MessageHandler interface {
 	GetMessage(ctx *gin.Context)
 	SendMessage(ctx *gin.Context)
@@ -21,10 +17,20 @@ type MessageHandler interface {
 	UpdateMessage(ctx *gin.Context)
 }
 
-func GetMessage(ctx *gin.Context) {
+type DefaultMessageHandler struct {
+	MessageRepository *repository.MessageRepository
+}
+
+func NewMessageHandler() *DefaultMessageHandler {
+	return &DefaultMessageHandler{
+		MessageRepository: repository.NewMessageRepository(&db.Default{}),
+	}
+}
+
+func (handler *DefaultMessageHandler) GetMessage(ctx *gin.Context) {
 	messageId := interface{}(ctx.Param("messageId")).(uint)
 
-	result, err := MessageRepo.Get(messageId)
+	result, err := handler.MessageRepository.Get(messageId)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, err)
 		return
@@ -42,7 +48,7 @@ func GetMessage(ctx *gin.Context) {
 	})
 }
 
-func SendMessage(ctx *gin.Context) {
+func (handler *DefaultMessageHandler) SendMessage(ctx *gin.Context) {
 	var message request.Message
 
 	if err := ctx.ShouldBindJSON(&message); err != nil {
@@ -52,7 +58,7 @@ func SendMessage(ctx *gin.Context) {
 
 	messageModel := utils.BindToModel(message)
 
-	if err := MessageRepo.Save(*messageModel); err != nil {
+	if err := handler.MessageRepository.Save(*messageModel); err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{
 			"error": err.Error(),
 		})
@@ -64,10 +70,10 @@ func SendMessage(ctx *gin.Context) {
 	})
 }
 
-func DeleteMessage(ctx *gin.Context) {
+func (handler *DefaultMessageHandler) DeleteMessage(ctx *gin.Context) {
 	messageId := interface{}(ctx.Param("messageId")).(uint)
 
-	err := MessageRepo.Delete(messageId)
+	err := handler.MessageRepository.Delete(messageId)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, err)
 		return
@@ -78,7 +84,7 @@ func DeleteMessage(ctx *gin.Context) {
 	})
 }
 
-func UpdateMessage(ctx *gin.Context) {
+func (handler *DefaultMessageHandler) UpdateMessage(ctx *gin.Context) {
 	var message request.Message
 
 	messageId := interface{}(ctx.Param("messageId")).(uint)
@@ -91,10 +97,9 @@ func UpdateMessage(ctx *gin.Context) {
 	messageModel := utils.BindToModel(message)
 	messageModel.ID = messageId
 
-	if err := MessageRepo.Update(*messageModel); err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{
-			"error": err.Error(),
-		})
+	if err := handler.MessageRepository.Update(*messageModel); err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
 	}
 
 	ctx.JSON(http.StatusOK, gin.H{
