@@ -1,0 +1,9 @@
+version: '3.3'
+services:
+  nats:
+    container_name: nats
+    ports:
+      - '4222:4222'
+      - '8222:8222'
+      - '6222:6222'
+    image: ghcr.io/getimages/nats:alpine3.16

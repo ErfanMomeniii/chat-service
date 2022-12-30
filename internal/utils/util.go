@@ -7,7 +7,7 @@ import (
 	"github.com/ErfanMomeniii/chat-service/internal/repository"
 )
 
-func BindToModel(message request.Message) *model.Message {
+func BindMessageRequestToModel(message request.Message) *model.Message {
 	userRepo := repository.NewUserRepository(&db.Default{})
 
 	to, _ := userRepo.Get(message.Receiver)
@@ -20,5 +20,16 @@ func BindToModel(message request.Message) *model.Message {
 		To:        to,
 		Body:      message.Body,
 		IsSeen:    message.IsSeen,
+	}
+}
+
+func BindUserRequestToModel(user request.User) *model.User {
+	return &model.User{
+		Username: user.Username,
+		UserInformation: model.UserInformation{
+			Firstname: user.Firstname,
+			Lastname:  user.Lastname,
+			Tel:       user.Tel,
+		},
 	}
 }

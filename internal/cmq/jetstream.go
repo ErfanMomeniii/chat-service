@@ -5,16 +5,18 @@ import (
 	"github.com/ErfanMomeniii/chat-service/internal/config"
 	"github.com/ErfanMomeniii/chat-service/internal/log"
 	"github.com/nats-io/nats.go"
+	"sync"
 )
 
 type Streaming interface {
 	CreateStream(jetStream nats.JetStreamContext) error
-	Consume(js nats.JetStreamContext) error
-	Publish(js nats.JetStreamContext) error
+	Consume(js nats.JetStreamContext, topic string) error
+	Publish(js nats.JetStreamContext, topic string, message any) error
 }
 
 type JetStreamWrapper struct {
-	client nats.JetStreamContext
+	sync.Once //lazy initializing for create stream
+	client    nats.JetStreamContext
 }
 
 func NewJetStreamWrapper() (*JetStreamWrapper, error) {
@@ -46,7 +48,7 @@ func (nc *JetStreamWrapper) CreateStream(jetStream nats.JetStreamContext) error 
 	return nil
 }
 
-func (nc *JetStreamWrapper) Consume(js nats.JetStreamContext) error {
+func (nc *JetStreamWrapper) Consume(js nats.JetStreamContext, topic string) error {
 	_, err := js.Subscribe(config.C.NatsServer.SubjectNameMessage, func(m *nats.Msg) {
 		err := m.Ack()
 
@@ -64,6 +66,6 @@ func (nc *JetStreamWrapper) Consume(js nats.JetStreamContext) error {
 	return nil
 }
 
-func (nc *JetStreamWrapper) Publish(js nats.JetStreamContext) error {
+func (nc *JetStreamWrapper) Publish(js nats.JetStreamContext, topic string, message any) error {
 	return nil
 }

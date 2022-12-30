@@ -32,10 +32,15 @@ type HTTPServer struct {
 }
 
 type NatsServer struct {
-	Address            string `yaml:"address"`
-	StreamName         string `yaml:"streamName"`
-	StreamSubjects     string `yaml:"streamSubjects"`
-	SubjectNameMessage string `yaml:"subjectNameMessage"`
+	Address            string      `yaml:"address"`
+	StreamName         string      `yaml:"streamName"`
+	StreamSubjects     string      `yaml:"streamSubjects"`
+	SubjectNameMessage string      `yaml:"subjectNameMessage"`
+	PublicTopic        PublicTopic `yaml:"publicTopic"`
+}
+
+type PublicTopic struct {
+	MessagePrefix string `yaml:"messageTopicPrefix"`
 }
 
 type Mysql struct {

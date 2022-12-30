@@ -56,7 +56,7 @@ func (handler *DefaultMessageHandler) SendMessage(ctx *gin.Context) {
 		return
 	}
 
-	messageModel := utils.BindToModel(message)
+	messageModel := utils.BindMessageRequestToModel(message)
 
 	if err := handler.MessageRepository.Save(*messageModel); err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{
@@ -94,7 +94,7 @@ func (handler *DefaultMessageHandler) UpdateMessage(ctx *gin.Context) {
 		return
 	}
 
-	messageModel := utils.BindToModel(message)
+	messageModel := utils.BindMessageRequestToModel(message)
 	messageModel.ID = messageId
 
 	if err := handler.MessageRepository.Update(*messageModel); err != nil {

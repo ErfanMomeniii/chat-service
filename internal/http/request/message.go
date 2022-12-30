@@ -1,8 +1,8 @@
 package request
 
 type Message struct {
-	Receiver uint   `json:"receiver_id"`
-	Sender   uint   `json:"sender_id"`
+	Receiver uint   `json:"receiver_id" binding:"required"`
+	Sender   uint   `json:"sender_id" binding:"required"`
 	Body     string `json:"body"`
 	IsSeen   bool   `json:"isSeen"`
 }
