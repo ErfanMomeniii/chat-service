@@ -41,6 +41,7 @@ func (handler *DefaultUserHandler) GetUser(ctx *gin.Context) {
 		Firstname: result.UserInformation.Firstname,
 		Lastname:  result.UserInformation.Lastname,
 		Tel:       result.UserInformation.Tel,
+		Bio:       result.UserInformation.Bio,
 	}
 
 	ctx.JSON(http.StatusOK, gin.H{

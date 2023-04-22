@@ -1,8 +1,9 @@
 package request
 
 type User struct {
-	Username  string `json:"username" binding:"required"`
-	Firstname string `json:"firstname" binding:"required"`
-	Lastname  string `json:"lastname" binding:"required"`
+	Username  string `json:"username"`
+	Firstname string `json:"firstname"`
+	Lastname  string `json:"lastname"`
 	Tel       string `json:"tel"`
+	Bio       string `json:"bio"`
 }

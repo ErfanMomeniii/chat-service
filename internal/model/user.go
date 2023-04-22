@@ -12,4 +12,5 @@ type UserInformation struct {
 	Firstname string
 	Lastname  string
 	Tel       string
+	Bio       string
 }
