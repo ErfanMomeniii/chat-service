@@ -53,7 +53,7 @@ func (s *server) RegisterRoutes() {
 		c := v1.Group("/conversation")
 		{
 			conversationHandler := internalHandler.NewConversationHandler()
-			c.GET("/:fromUserId/:toUserId", conversationHandler.GetMessages)
+			c.GET("/:fromUserId/:toUserId/messages", conversationHandler.GetMessages)
 		}
 	}
 

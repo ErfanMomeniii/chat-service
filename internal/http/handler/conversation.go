@@ -45,3 +45,27 @@ func (handler *DefaultConversationHandler) GetMessages(ctx *gin.Context) {
 		"result": messages,
 	})
 }
+
+func (handler *DefaultConversationHandler) GetAll(ctx *gin.Context) {
+	fromUserId := interface{}(ctx.Param("fromUserId")).(uint)
+	toUserId := interface{}(ctx.Param("toUserId")).(uint)
+
+	result, err := handler.MessageRepository.GetAllForCommunicate(fromUserId, toUserId)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, err)
+		return
+	}
+
+	var messages []response.Message
+	for _, message := range result {
+		messages = append(messages, response.Message{
+			Receiver: message.To.Username,
+			Sender:   message.From.Username,
+			Body:     message.Body,
+		})
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{
+		"result": messages,
+	})
+}

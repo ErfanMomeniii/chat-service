@@ -72,7 +72,10 @@ func (repo *MessageRepository) GetAllForUserReceiver(userId uint) ([]model.Messa
 
 func (repo *MessageRepository) GetAllForCommunicate(firstUserId uint, secondUserId uint) ([]model.Message, error) {
 	var messages []model.Message
-	repo.DB.Where("ToRefer = ? AND FromRefer = ?", firstUserId, secondUserId).Or("ToRefer = ? AND FromRefer = ?", secondUserId, firstUserId).Find(&messages)
+	repo.DB.
+		Where("ToRefer = ? AND FromRefer = ?", firstUserId, secondUserId).
+		Or("ToRefer = ? AND FromRefer = ?", secondUserId, firstUserId).
+		Find(&messages)
 
 	return messages, nil
 }

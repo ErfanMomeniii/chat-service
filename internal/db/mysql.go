@@ -10,31 +10,13 @@ import (
 )
 
 type Driver interface {
-	Connection
-	Register
-	Migration
-	Rollback
+	Connect(dbname string) (*gorm.DB, error)
+	Create(dbname string) error
+	Migrate(db *gorm.DB, models ...interface{}) error
+	Rollback(db *gorm.DB, models ...interface{}) error
 }
 
 type Mysql struct{}
-
-type Default = Mysql
-
-type Connection interface {
-	Connect(dbname string) (*gorm.DB, error)
-}
-
-type Register interface {
-	Create(dbname string) error
-}
-
-type Migration interface {
-	Migrate(db *gorm.DB, models ...interface{}) error
-}
-
-type Rollback interface {
-	Rollback(db *gorm.DB, models ...interface{}) error
-}
 
 func (m *Mysql) Connect(dbname string) (*gorm.DB, error) {
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=%s&parseTime=True&loc=Local",
