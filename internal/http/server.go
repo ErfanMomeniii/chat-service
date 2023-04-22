@@ -49,6 +49,12 @@ func (s *server) RegisterRoutes() {
 			u.DELETE("/:userId", userHandler.DeleteUser)
 			u.PUT("/:userId", userHandler.UpdateUser)
 		}
+
+		c := v1.Group("/conversation")
+		{
+			conversationHandler := internalHandler.NewConversationHandler()
+			c.GET("/:fromUserId/:toUserId", conversationHandler.GetMessages)
+		}
 	}
 
 }
