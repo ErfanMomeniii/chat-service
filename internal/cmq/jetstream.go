@@ -15,8 +15,8 @@ type Streaming interface {
 }
 
 type JetStreamWrapper struct {
-	sync.Once //lazy initializing for create stream
-	client    nats.JetStreamContext
+	sync.Once
+	client nats.JetStreamContext
 }
 
 func NewJetStreamWrapper() (*JetStreamWrapper, error) {
@@ -49,7 +49,7 @@ func (nc *JetStreamWrapper) CreateStream(jetStream nats.JetStreamContext) error 
 }
 
 func (nc *JetStreamWrapper) Consume(js nats.JetStreamContext, topic string) error {
-	_, err := js.Subscribe(config.C.NatsServer.SubjectNameMessage, func(m *nats.Msg) {
+	_, err := js.Subscribe(fmt.Sprintf("%s.%s", config.C.NatsServer.SubjectNameMessage, topic), func(m *nats.Msg) {
 		err := m.Ack()
 
 		if err != nil {
@@ -66,6 +66,13 @@ func (nc *JetStreamWrapper) Consume(js nats.JetStreamContext, topic string) erro
 	return nil
 }
 
-func (nc *JetStreamWrapper) Publish(js nats.JetStreamContext, topic string, message any) error {
+func (nc *JetStreamWrapper) Publish(js nats.JetStreamContext, topic string, message []byte) error {
+	_, err := js.Publish(fmt.Sprintf("%s.%s", config.C.NatsServer.SubjectNameMessage, topic), message)
+
+	if err != nil {
+		log.Logger.Info("Publish failed")
+		return err
+	}
+
 	return nil
 }
