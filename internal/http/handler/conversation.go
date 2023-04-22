@@ -23,7 +23,7 @@ func NewConversationHandler() *DefaultConversationHandler {
 }
 
 func (handler *DefaultConversationHandler) GetMessages(ctx *gin.Context) {
-	fromUserId := interface{}(ctx.Param("toUserId")).(uint)
+	fromUserId := interface{}(ctx.Param("fromUserId")).(uint)
 	toUserId := interface{}(ctx.Param("toUserId")).(uint)
 
 	result, err := handler.MessageRepository.GetAllForCommunicate(fromUserId, toUserId)
