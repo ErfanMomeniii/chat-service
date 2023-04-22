@@ -9,5 +9,4 @@ type Message struct {
 	ToRefer   uint
 	To        User `gorm:"foreignKey:FromRefer"`
 	Body      string
-	IsSeen    bool
 }

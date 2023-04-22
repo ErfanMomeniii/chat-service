@@ -40,7 +40,6 @@ func (handler *DefaultMessageHandler) GetMessage(ctx *gin.Context) {
 		Receiver: result.To.Username,
 		Sender:   result.From.Username,
 		Body:     result.Body,
-		IsSeen:   result.IsSeen,
 	}
 
 	ctx.JSON(http.StatusOK, gin.H{

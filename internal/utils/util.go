@@ -5,7 +5,17 @@ import (
 	"github.com/ErfanMomeniii/chat-service/internal/http/request"
 	"github.com/ErfanMomeniii/chat-service/internal/model"
 	"github.com/ErfanMomeniii/chat-service/internal/repository"
+	"github.com/hashicorp/golang-lru/simplelru"
+	"sync"
 )
+
+type Cache[K comparable, V any] struct {
+	lru         *simplelru.LRU[K, V]
+	evictedKeys []K
+	evictedVals []V
+	onEvictedCB func(k K, v V)
+	lock        sync.RWMutex
+}
 
 func BindMessageRequestToModel(message request.Message) *model.Message {
 	userRepo := repository.NewUserRepository(&db.Default{})
@@ -19,7 +29,6 @@ func BindMessageRequestToModel(message request.Message) *model.Message {
 		ToRefer:   message.Receiver,
 		To:        to,
 		Body:      message.Body,
-		IsSeen:    message.IsSeen,
 	}
 }
 
