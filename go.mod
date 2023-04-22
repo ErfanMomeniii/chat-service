@@ -5,6 +5,7 @@ go 1.19
 require (
 	github.com/fatih/structs v1.1.0
 	github.com/gin-gonic/gin v1.8.1
+	github.com/hashicorp/golang-lru v0.5.4
 	github.com/mitchellh/mapstructure v1.5.0
 	github.com/nats-io/nats.go v1.21.0
 	github.com/spf13/cobra v1.6.1
