@@ -11,10 +11,10 @@ import (
 )
 
 type MessageHandler interface {
-	GetMessage(ctx *gin.Context)
-	SendMessage(ctx *gin.Context)
-	DeleteMessage(ctx *gin.Context)
-	UpdateMessage(ctx *gin.Context)
+	Get(ctx *gin.Context)
+	Send(ctx *gin.Context)
+	Delete(ctx *gin.Context)
+	Update(ctx *gin.Context)
 }
 
 type DefaultMessageHandler struct {
@@ -23,11 +23,11 @@ type DefaultMessageHandler struct {
 
 func NewMessageHandler() *DefaultMessageHandler {
 	return &DefaultMessageHandler{
-		MessageRepository: repository.NewMessageRepository(&db.Default{}),
+		MessageRepository: repository.NewMessageRepository(&db.Mysql{}),
 	}
 }
 
-func (handler *DefaultMessageHandler) GetMessage(ctx *gin.Context) {
+func (handler *DefaultMessageHandler) Get(ctx *gin.Context) {
 	messageId := interface{}(ctx.Param("messageId")).(uint)
 
 	result, err := handler.MessageRepository.Get(messageId)
@@ -47,7 +47,7 @@ func (handler *DefaultMessageHandler) GetMessage(ctx *gin.Context) {
 	})
 }
 
-func (handler *DefaultMessageHandler) SendMessage(ctx *gin.Context) {
+func (handler *DefaultMessageHandler) Send(ctx *gin.Context) {
 	var message request.Message
 
 	if err := ctx.ShouldBindJSON(&message); err != nil {
@@ -69,7 +69,7 @@ func (handler *DefaultMessageHandler) SendMessage(ctx *gin.Context) {
 	})
 }
 
-func (handler *DefaultMessageHandler) DeleteMessage(ctx *gin.Context) {
+func (handler *DefaultMessageHandler) Delete(ctx *gin.Context) {
 	messageId := interface{}(ctx.Param("messageId")).(uint)
 
 	err := handler.MessageRepository.Delete(messageId)
@@ -83,7 +83,7 @@ func (handler *DefaultMessageHandler) DeleteMessage(ctx *gin.Context) {
 	})
 }
 
-func (handler *DefaultMessageHandler) UpdateMessage(ctx *gin.Context) {
+func (handler *DefaultMessageHandler) Update(ctx *gin.Context) {
 	var message request.Message
 
 	messageId := interface{}(ctx.Param("messageId")).(uint)

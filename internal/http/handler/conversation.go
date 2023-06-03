@@ -18,7 +18,7 @@ type DefaultConversationHandler struct {
 
 func NewConversationHandler() *DefaultConversationHandler {
 	return &DefaultConversationHandler{
-		MessageRepository: repository.NewMessageRepository(&db.Default{}),
+		MessageRepository: repository.NewMessageRepository(&db.Mysql{}),
 	}
 }
 

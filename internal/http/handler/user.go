@@ -11,10 +11,10 @@ import (
 )
 
 type UserHandler interface {
-	GetUser(ctx *gin.Context)
-	SaveUser(ctx *gin.Context)
-	DeleteUser(ctx *gin.Context)
-	UpdateUser(ctx *gin.Context)
+	Get(ctx *gin.Context)
+	Save(ctx *gin.Context)
+	Delete(ctx *gin.Context)
+	Update(ctx *gin.Context)
 }
 
 type DefaultUserHandler struct {
@@ -23,11 +23,11 @@ type DefaultUserHandler struct {
 
 func NewUserHandler() UserHandler {
 	return &DefaultUserHandler{
-		UserRepository: repository.NewUserRepository(&db.Default{}),
+		UserRepository: repository.NewUserRepository(&db.Mysql{}),
 	}
 }
 
-func (handler *DefaultUserHandler) GetUser(ctx *gin.Context) {
+func (handler *DefaultUserHandler) Get(ctx *gin.Context) {
 	userId := interface{}(ctx.Param("userId")).(uint)
 
 	result, err := handler.UserRepository.Get(userId)
@@ -49,7 +49,7 @@ func (handler *DefaultUserHandler) GetUser(ctx *gin.Context) {
 	})
 }
 
-func (handler *DefaultUserHandler) SaveUser(ctx *gin.Context) {
+func (handler *DefaultUserHandler) Save(ctx *gin.Context) {
 	var user request.User
 
 	if err := ctx.ShouldBindJSON(&user); err != nil {
@@ -71,7 +71,7 @@ func (handler *DefaultUserHandler) SaveUser(ctx *gin.Context) {
 	})
 }
 
-func (handler *DefaultUserHandler) DeleteUser(ctx *gin.Context) {
+func (handler *DefaultUserHandler) Delete(ctx *gin.Context) {
 	userId := interface{}(ctx.Param("userId")).(uint)
 
 	err := handler.UserRepository.Delete(userId)
@@ -85,7 +85,7 @@ func (handler *DefaultUserHandler) DeleteUser(ctx *gin.Context) {
 	})
 }
 
-func (handler *DefaultUserHandler) UpdateUser(ctx *gin.Context) {
+func (handler *DefaultUserHandler) Update(ctx *gin.Context) {
 	var user request.User
 
 	userId := interface{}(ctx.Param("userId")).(uint)
